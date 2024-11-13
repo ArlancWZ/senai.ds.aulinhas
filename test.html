@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Áreas Selecionáveis com Texto Centralizado</title>
+    <style>
+        /* Container da grade */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Primeira linha (3 colunas) */
+            grid-template-rows: auto; /* Tamanho automático das linhas */
+            grid-template-areas: 
+                "area1 area2 area3"
+                "area4 area5 area6 area7"
+                "area8 area9 area10"; /* Definindo o layout 3/4/3 */
+            gap: 10px;
+            justify-items: center; /* Centraliza os itens dentro de suas células */
+        }
+
+        /* Especifica a largura das áreas da última linha para centralizá-las */
+        .container > .quadrado:nth-child(8),
+        .container > .quadrado:nth-child(9),
+        .container > .quadrado:nth-child(10) {
+            grid-column: span 1; /* Isso força as áreas da última linha a ocupar uma coluna */
+        }
+
+        /* Estilos para as áreas (quadrados) */
+        .quadrado {
+            width: 100%;
+            max-width: 100px; /* Ajusta o tamanho máximo para 100px */
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border: 1px solid #333;
+            font-weight: bold;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .selecionado {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        /* Estilos para o retângulo central */
+        .retangulo-central {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-size: 20px;
+            text-align: center;
+            display: none; /* Oculto inicialmente */
+            z-index: 1000;
+        }
+
+        /* Botão para fechar o retângulo */
+        .btn-fechar {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Áreas Selecionáveis de 1 a 10</h1>
+    <div class="container">
+        <!-- Gera 10 áreas numeradas com funcionalidade de seleção e texto flutuante -->
+        <div id="area1" class="quadrado" onclick="mostrarTextoCentral(1)">1</div>
+        <div id="area2" class="quadrado" onclick="mostrarTextoCentral(2)">2</div>
+        <div id="area3" class="quadrado" onclick="mostrarTextoCentral(3)">3</div>
+        <div id="area4" class="quadrado" onclick="mostrarTextoCentral(4)">4</div>
+        <div id="area5" class="quadrado" onclick="mostrarTextoCentral(5)">5</div>
+        <div id="area6" class="quadrado" onclick="mostrarTextoCentral(6)">6</div>
+        <div id="area7" class="quadrado" onclick="mostrarTextoCentral(7)">7</div>
+        <div id="area8" class="quadrado" onclick="mostrarTextoCentral(8)">8</div>
+        <div id="area9" class="quadrado" onclick="mostrarTextoCentral(9)">9</div>
+        <div id="area10" class="quadrado" onclick="mostrarTextoCentral(10)">10</div>
+    </div>
+
+    <!-- Retângulo central com texto flutuante -->
+    <div id="retanguloCentral" class="retangulo-central">
+        <p id="textoRetangulo">Área Selecionada</p>
+        <button class="btn-fechar" onclick="fecharRetangulo()">Fechar</button>
+    </div>
+
+    <script>
+        // Função para mostrar o retângulo central com o número da área selecionada
+        function mostrarTextoCentral(area) {
+            // Atualiza o texto do retângulo central com o número da área
+            document.getElementById('textoRetangulo').innerText = `Área ${area} Selecionada`;
+            
+            // Exibe o retângulo central
+            document.getElementById('retanguloCentral').style.display = 'block';
+        }
+
+        // Função para fechar o retângulo central
+        function fecharRetangulo() {
+            document.getElementById('retanguloCentral').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

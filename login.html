@@ -1,0 +1,127 @@
+<?php
+// Inicia a sessão
+session_start();
+
+// Verifica se o login foi realizado
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Dados para autenticação
+    $usuario = $_POST['usuario'];
+    $senha = $_POST['senha'];
+
+    // Valida o login (simulando a verificação de um usuário e senha fixos)
+    // Aqui seria onde você pode verificar no banco de dados
+    if ($usuario === 'admin' && $senha === '358767') {
+        $_SESSION['usuario_id'] = 1; // Definindo o ID do usuário para acesso
+        $_SESSION['usuario_nome'] = 'Administrador';
+        $_SESSION['is_admin'] = true; // Marca que é um admin
+        header('Location: dashboard.php'); // Redireciona para o painel de controle
+        exit;
+    } elseif ($usuario === 'cliente' && $senha === '123456') {
+        $_SESSION['usuario_id'] = 2; // ID para clientes
+        $_SESSION['usuario_nome'] = 'Cliente';
+        $_SESSION['is_admin'] = false; // Marca que não é admin
+        header('Location: compra_carro.php'); // Redireciona para página de compra
+        exit;
+    } else {
+        $erro = 'Usuário ou senha inválidos!';
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Gestão do Pátio de Automóveis</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 300px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .erro {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .link-registrar {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .link-registrar a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .link-registrar a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Login</h1>
+        <form method="POST" action="login.php">
+            <label for="usuario">Usuário:</label>
+            <input type="text" id="usuario" name="usuario" required>
+
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
+
+            <input type="submit" value="Entrar">
+
+            <?php if (isset($erro)): ?>
+                <div class="erro"><?php echo $erro; ?></div>
+            <?php endif; ?>
+        </form>
+
+        <div class="link-registrar">
+            <p>Não tem uma conta? <a href="cadastro.php">Cadastre-se</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

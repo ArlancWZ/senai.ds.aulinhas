@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão do Pátio de Automóveis</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        /* Container para as áreas do pátio */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        /* Quadrados das áreas com tamanhos maiores */
+        .quadrado {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border: 1px solid #333;
+            font-weight: bold;
+            font-size: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .selecionado {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .azul {
+            background-color: #0000FF;
+            color: white;
+        }
+
+        .branco {
+            background-color: #FFFFFF;
+        }
+
+        /* Estilos para o retângulo central (detalhes da área) */
+        .retangulo-central {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-size: 20px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Botão para fechar o retângulo */
+        .btn-fechar {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Tela para adicionar carros */
+        #adicionarCarro {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 10px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        select, input, button {
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gestão do Pátio de Automóveis</h1>
+    <div class="container">
+        <!-- Áreas interativas -->
+        <div class="quadrado" id="area1" class="branco" onclick="mostrarTextoCentral(1)">1</div>
+        <div class="quadrado" id="area2" class="azul" onclick="mostrarTextoCentral(2)">2</div>
+        <div class="quadrado" id="area3" class="branco" onclick="mostrarTextoCentral(3)">3</div>
+        <div class="quadrado" id="area4" class="azul" onclick="mostrarTextoCentral(4)">4</div>
+        <div class="quadrado" id="area5" class="branco" onclick="mostrarTextoCentral(5)">5</div>
+        <div class="quadrado" id="area6" class="azul" onclick="mostrarTextoCentral(6)">6</div>
+        <div class="quadrado" id="area7" class="branco" onclick="mostrarTextoCentral(7)">7</div>
+        <div class="quadrado" id="area8" class="azul" onclick="mostrarTextoCentral(8)">8</div>
+        <div class="quadrado" id="area9" class="branco" onclick="mostrarTextoCentral(9)">9</div>
+        <div class="quadrado" id="area10" class="azul" onclick="mostrarTextoCentral(10)">10</div>
+    </div>
+
+    <!-- Retângulo central com texto flutuante -->
+    <div id="retanguloCentral" class="retangulo-central">
+        <p id="textoRetangulo"></p>
+        <button class="btn-fechar" onclick="fecharRetangulo()">Fechar</button>
+        <button class="btn-fechar" onclick="adicionarCarro()">Adicionar Carro</button>
+    </div>
+
+    <!-- Tela para adicionar carro -->
+    <div id="adicionarCarro">
+        <h3>Adicionar Novo Carro</h3>
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" placeholder="Modelo do carro" required>
+        <label for="preco">Preço:</label>
+        <input type="number" id="preco" placeholder="Preço do carro" required>
+        <label for="estoque">Estoque:</label>
+        <input type="number" id="estoque" placeholder="Estoque inicial (20-50)" min="20" max="50" required>
+        <button onclick="confirmarAdicao()">Confirmar</button>
+    </div>
+
+    <script>
+        // Lista de carros
+        const carros = [
+            { modelo: "Fusca", preco: 25000, estoque: 40 },
+            { modelo: "Gol", preco: 30000, estoque: 45 },
+            { modelo: "Civic", preco: 85000, estoque: 50 },
+            { modelo: "Uno", preco: 20000, estoque: 30 },
+            { modelo: "Corolla", preco: 95000, estoque: 20 }
+        ];
+
+        // Função para mostrar o retângulo central com o carro ou a mensagem
+        function mostrarTextoCentral(area) {
+            const areaElement = document.getElementById("area" + area);
+            let texto;
+            let temCarro = areaElement.classList.contains("azul");
+            
+            if (temCarro) {
+                // Se a área tem carro, seleciona um aleatório
+                const carroAleatorio = carros[Math.floor(Math.random() * carros.length)];
+                texto = `Carro: ${carroAleatorio.modelo}<br>Preço: R$ ${carroAleatorio.preco.toLocaleString('pt-BR')}<br>Estoque: ${carroAleatorio.estoque}`;
+            } else {
+                texto = "Não há carros nessa área";
+            }
+
+            document.getElementById('textoRetangulo').innerHTML = texto;
+            document.getElementById('retanguloCentral').style.display = 'block';
+        }
+
+        // Função para fechar o retângulo central
+        function fecharRetangulo() {
+            document.getElementById('retanguloCentral').style.display = 'none';
+        }
+
+        // Função para adicionar carro ao sistema
+        function adicionarCarro() {
+            document.getElementById('adicionarCarro').style.display = 'block';
+        }
+
+        // Função para confirmar adição de carro
+        function confirmarAdicao() {
+            const modelo = document.getElementById('modelo').value;
+            const preco = parseFloat(document.getElementById('preco').value);
+            const estoque = parseInt(document.getElementById('estoque').value);
+
+            if (modelo && preco && estoque) {
+                carros.push({ modelo, preco, estoque });
+                alert("Carro adicionado com sucesso!");
+                document.getElementById('adicionarCarro').style.display = 'none';
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        }
+
+        // Função para alternar estado das áreas
+        function alternarEstado(area) {
+            const areaElement = document.getElementById("area" + area);
+            
+            if (areaElement.classList.contains("branco")) {
+                // Se a área está branca, transforma em azul (adiciona um carro)
+                areaElement.classList.remove("branco");
+                areaElement.classList.add("azul");
+            } else {
+                // Se a área está azul, transforma em branco (remove carro)
+                areaElement.classList.remove("azul");
+                areaElement.classList.add("branco");
+            }
+        }
+    </script>
+
+</body>
+</html>
